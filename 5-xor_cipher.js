@@ -63,7 +63,12 @@ function prep_dec_key(msg_buffer, key_buffer) {
 	}
 }
 
-var encrypted_message = xor_cipher_enc("the secret is love", 'cupid');
-console.log('the secret is: ', encrypted_message);
-var decrypted_message = xor_cipher_dec(encrypted_message, 'cupid');
-console.log('the original message was: ', decrypted_message)
+// var encrypted_message = xor_cipher_enc("Cooking MC\'s like a pound of bacon", 'X');
+// console.log('the secret is: ', encrypted_message);
+// var decrypted_message = xor_cipher_dec(encrypted_message, 'X');
+// console.log('the original message was: ', decrypted_message)
+
+module.exports = {
+	enc : xor_cipher_enc,
+	dec : xor_cipher_dec
+}

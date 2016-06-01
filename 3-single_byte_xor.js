@@ -1,5 +1,7 @@
+var xor = require('./5-xor_cipher'); // to easily check my decryption
+
 function brute_force_xor(secret) {
-	var possibleKeys = [],
+	var possibleKeys = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split(''),
 		possibleTranslationsWithScores = [],
 		topScore,
 		scores = [],
@@ -17,7 +19,7 @@ function brute_force_xor(secret) {
 			len = cipher_buffer.length
 
 		for (i; i < len; i++) {
-			return_buffer[i] = key_buffer[0] ^ cipher_buffer[i]
+			return_buffer[i] = cipher_buffer[i] ^ key_buffer[0]
 		}
 		return return_buffer.toString();
 	}
@@ -37,21 +39,23 @@ function brute_force_xor(secret) {
 
 	}
 
-	for( var i = 0; i <= 255; i++) {
-		possibleKeys[i] = i;
-	}
-
+	// CHANGE TO RUNNING A FOR, SINCE WE NEED TO USE A BUFFER
 	// Run a map and filter to get the list of translations and their scores
 	// We also run Math.max on just an array of scores to get the top one
 	// We then filter our array of translations return only the ones
 	// with their score as the top score (in the cryptopals example, two
 	// translations have the top score).
-	possibleTranslationsWithScores = possibleKeys.map(function(key) {
-		var translation = xor_against_key(secret, key),
+
+	for (var i = 0; i < possibleKeys.length; i++) {
+		var translation = xor_against_key(secret, possibleKeys[i]),
 			score = scoreTranslation(translation);
-		scores.push(score);
-		return {translation: translation, score: score}
-	});
+		scores.push(score)
+		possibleTranslationsWithScores.push({
+			translation: translation, 
+			score: score, 
+			key: possibleKeys[i]
+		})
+	}
 
 	topScore = Math.max.apply(null, scores);
 
@@ -63,13 +67,22 @@ function brute_force_xor(secret) {
 
 }
 
-var hexEncodedString = '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736';
-console.log(brute_force_xor(hexEncodedString));
+// var hexEncodedString = '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736';
+// bf = brute_force_xor(hexEncodedString);
+// console.log(bf);
+/* Returns: 
+[ { translation: 'Cooking MC\'s like a pound of bacon',
+    score: 24,
+    key: 'X' } ]
+*/
 
-// Returns:
-// [ { translation: 'cOOKING\u0000mc\u0007S\u0000LIKE\u0000A\u0000POUND\u0000OF\u0000BACON',
-//     score: 27 },
-//   { translation: 'Cooking MC\'s like a pound of bacon',
-//     score: 27 } ]
+// var key = bf[0].key;
+// console.log(key);
+// Returns: 'X'
+
+// Test
+// var dec = xor.dec(hexEncodedString, key);
+// console.log(dec);
+
 
 module.exports = brute_force_xor;
