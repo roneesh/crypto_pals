@@ -148,6 +148,3 @@ module.exports = bufferUtils;
 // 5. Transpose a chunked array
 // console.log(bufferUtils.transpose2D(aToTwo));
 // --> it works!
-
-
-console.log(bufferUtils.singleCharBuffer());

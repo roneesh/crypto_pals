@@ -118,4 +118,3 @@ function hammingDistance(a, b) {
 
 // console.log(a, b);
 
-

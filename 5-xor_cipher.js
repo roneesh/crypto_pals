@@ -47,7 +47,9 @@ function prep_enc_key(msg, key) {
 	}
 	return key;
 }
+
 function prep_dec_key(cipher_buffer, key_buffer) {
+
 	if (cipher_buffer.length < key_buffer.length) {
 		key_buffer = key_buffer.slice(0, cipher_buffer.length);
 	} else if (cipher_buffer.length > key_buffer.length) {
@@ -65,16 +67,10 @@ function prep_dec_key(cipher_buffer, key_buffer) {
 	}
 }
 
-var encrypted_message = xor_cipher_enc("Cooking MC\'s like a pound of bacon", 'X');
-console.log('the secret is: ', encrypted_message);
-var decrypted_message = xor_cipher_dec(encrypted_message, 'X');
-console.log('the original message was: ', decrypted_message)
-
-var em2 = xor_cipher_enc('C', 'X');
-console.log('single secret is: ', em2);
-// console.log(prep_dec_key(em2, 'X'))
-var dm2 = xor_cipher_dec(em2, 'X');
-console.log('decrypted mesage is: ', dm2);
+// var encrypted_message = xor_cipher_enc("Cooking MC\'s like a pound of bacon", 'X');
+// console.log('the secret is: ', encrypted_message);
+// var decrypted_message = xor_cipher_dec(encrypted_message, 'X');
+// console.log('the original message was: ', decrypted_message)
 
 module.exports = {
 	enc : xor_cipher_enc,

@@ -39,13 +39,7 @@ function brute_force_xor(secret) {
 
 	}
 
-	// CHANGE TO RUNNING A FOR, SINCE WE NEED TO USE A BUFFER
-	// Run a map and filter to get the list of translations and their scores
-	// We also run Math.max on just an array of scores to get the top one
-	// We then filter our array of translations return only the ones
-	// with their score as the top score (in the cryptopals example, two
-	// translations have the top score).
-
+	// Use a for loop to get the list of translations and their scores
 	for (var i = 0; i < possibleKeys.length; i++) {
 		var translation = xor_against_key(secret, possibleKeys[i]),
 			score = scoreTranslation(translation);
@@ -57,8 +51,10 @@ function brute_force_xor(secret) {
 		})
 	}
 
+	// Run Math.max on just an array of scores to get the top one
 	topScore = Math.max.apply(null, scores);
 
+	// filter our array of translations return only the ones with their score as the top score
 	topScorers = possibleTranslationsWithScores.filter(function(translation) {
 		return translation.score === topScore;
 	});
@@ -67,22 +63,21 @@ function brute_force_xor(secret) {
 
 }
 
-// var hexEncodedString = '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736';
-// bf = brute_force_xor(hexEncodedString);
-// console.log(bf);
+var hexEncodedString = '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736';
+bf = brute_force_xor(hexEncodedString);
 /* Returns: 
 [ { translation: 'Cooking MC\'s like a pound of bacon',
     score: 24,
     key: 'X' } ]
 */
 
-// var key = bf[0].key;
-// console.log(key);
-// Returns: 'X'
-
 // Test
-// var dec = xor.dec(hexEncodedString, key);
-// console.log(dec);
-
+var key = bf[0].key;
+var dec = xor.dec(hexEncodedString, key);
+if (dec !== "Cooking MC's like a pound of bacon") {
+	throw 'single byte xor not working'
+} else {
+	console.log('it is working!')
+}
 
 module.exports = brute_force_xor;

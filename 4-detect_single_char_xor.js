@@ -14,4 +14,4 @@ messages = messages.filter(function(message) {
 	return message[0].score === topScore;
 });
 
-console.log(messages);
+// console.log(messages);
