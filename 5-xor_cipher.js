@@ -67,9 +67,9 @@ function prep_dec_key(cipher_buffer, key_buffer) {
 	}
 }
 
-// var encrypted_message = xor_cipher_enc("Cooking MC\'s like a pound of bacon", 'X');
+// var encrypted_message = xor_cipher_enc("Roneesh is awesome and he will eventually solve this problem, maybe, we are not sure yet, so lets keep typing", 'ICE');
 // console.log('the secret is: ', encrypted_message);
-// var decrypted_message = xor_cipher_dec(encrypted_message, 'X');
+// var decrypted_message = xor_cipher_dec(encrypted_message, 'ICE');
 // console.log('the original message was: ', decrypted_message)
 
 module.exports = {

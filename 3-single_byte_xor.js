@@ -1,7 +1,7 @@
 var xor = require('./5-xor_cipher'); // to easily check my decryption
 
 function brute_force_xor(secret) {
-	var possibleKeys = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split(''),
+	var possibleKeys = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ: ".split(''),
 		possibleTranslationsWithScores = [],
 		topScore,
 		scores = [],
@@ -13,7 +13,7 @@ function brute_force_xor(secret) {
 	// translations that we then have to score.
 	function xor_against_key(cipher_text, key) {
 		var cipher_buffer = new Buffer(cipher_text, 'hex'),
-			key_buffer = new Buffer(key, 'utf-8'),
+			key_buffer = new Buffer(key, 'ascii'),
 			return_buffer = new Buffer(cipher_buffer.length),
 			i = 0, 
 			len = cipher_buffer.length
@@ -21,7 +21,7 @@ function brute_force_xor(secret) {
 		for (i; i < len; i++) {
 			return_buffer[i] = cipher_buffer[i] ^ key_buffer[0]
 		}
-		return return_buffer.toString();
+		return return_buffer.toString('ascii');
 	}
 
 	// For every english character after the xor, it gets 1pt.
@@ -31,7 +31,7 @@ function brute_force_xor(secret) {
 			i = 0,
 			len = plainText.length
 		for (i; i < len; i++) {
-			if (/[ETAOIN SHRDLU etaoin shrdlu\']/.test(plainText[i])) {
+			if (/[ETAOINSHRDLUetaoinshrdlu]/.test(plainText[i])) {
 				score++;
 			}
 		}
@@ -59,12 +59,13 @@ function brute_force_xor(secret) {
 		return translation.score === topScore;
 	});
 
+	// return possibleTranslationsWithScores;
 	return topScorers;
 
 }
 
-var hexEncodedString = '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736';
-bf = brute_force_xor(hexEncodedString);
+// var hexEncodedString = '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736';
+// bf = brute_force_xor(hexEncodedString);
 /* Returns: 
 [ { translation: 'Cooking MC\'s like a pound of bacon',
     score: 24,
@@ -72,12 +73,12 @@ bf = brute_force_xor(hexEncodedString);
 */
 
 // Test
-var key = bf[0].key;
-var dec = xor.dec(hexEncodedString, key);
-if (dec !== "Cooking MC's like a pound of bacon") {
-	throw 'single byte xor not working'
-} else {
-	console.log('it is working!')
-}
+// var key = bf[0].key;
+// var dec = xor.dec(hexEncodedString, key);
+// if (dec !== "Cooking MC's like a pound of bacon") {
+// 	throw 'single byte xor not working'
+// } else {
+// 	console.log('it is working!')
+// }
 
 module.exports = brute_force_xor;
