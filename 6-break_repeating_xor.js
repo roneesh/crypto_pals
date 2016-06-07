@@ -11,7 +11,7 @@ function getKeySize(cipherBuffer) {
 		avgHammingDistanceForKeySize = [],
 		lowestHammingDistance = null;
 
-	while(keySize <= 60) {
+	while(keySize <= 40) {
 		avgHammingDistanceForKeySize.push({
 			key: keySize,
 			avgHammingDistance: hammingTest(cipherBuffer, keySize)
@@ -21,15 +21,14 @@ function getKeySize(cipherBuffer) {
 
 	return avgHammingDistanceForKeySize.sort(function(a, b) {
 		if (a.avgHammingDistance < b.avgHammingDistance) {return -1; }
-		if (b.avgHammingDistance > a.avgHammingDistance) {return 1;  }
-		if (a.avgHammingDistance === b.avgHammingDistance) { return 0; }
+		else if (b.avgHammingDistance > a.avgHammingDistance) {return 1;  }
+		else if (a.avgHammingDistance === b.avgHammingDistance) { return 0; }
 	})
 }
 
 function hammingTest(cipherBuffer, keySize) {
 	return compare(cipherBuffer.slice(0, keySize), cipherBuffer.slice(keySize, 2*keySize)) / keySize;
 }
-
 
 // ****
 // LOGS
@@ -39,57 +38,51 @@ function hammingTest(cipherBuffer, keySize) {
 // console.log(cipherBuffer);
 
 // 2. Log the likely key size
-var likelyKeySize = getKeySize(cipherBuffer);
+// var likelyKeySize = getKeySize(cipherBuffer);
 // console.log(likelyKeySize);
 
 // 3. Log the cipher split by our likelyKeySize, or a number we choose
-var cipherByKeySize = bu.bufferToChunks(cipherBuffer, 29);
+// var cipherByKeySize = bu.bufferToChunks(cipherBuffer, likelyKeySize);
 // console.log(cipherByKeySize);
 
 // 4. Log the transposed blocks by key size
-var transposedBlocks = bu.transpose2D(cipherByKeySize);
+// var transposedBlocks = bu.transpose2D(cipherByKeySize);
 // console.log('transposedBlocks')
 // console.log(transposedBlocks);
 
 // 5. brute foce each block and then push into a key block
-var keys = []
-transposedBlocks.forEach(function(transposedBlock) {
-	var bf = brute_force_xor(transposedBlock.toString('hex'));
-	keys.push(bf[0].key);
-});
-var key = keys.join('');
-console.log(key);
+// var keys = []
+// transposedBlocks.forEach(function(transposedBlock) {
+	// var bf = brute_force_xor(transposedBlock.toString('hex'));
+	// keys.push(bf[0].key);
+// });
+// var key = keys.join('');
+// console.log(key);
 
 // 6. Decrypt message with repeating key
-var decryptedMessage = xor.dec(cipherBuffer, key);
-console.log(decryptedMessage);
-
-
+// var decryptedMessage = xor.dec(cipherBuffer, key);
+// console.log(decryptedMessage);
 
 
 // *************************************
 // TO TEST ALL KEYS AT ONCE VIA FOR LOOP
 
+for (var i = 1; i < 40; i++) {
+	var cipherByKeySize = bu.bufferToChunks(cipherBuffer, i);
+	var transposedBlocks = bu.transpose2D(cipherByKeySize);
+	var keys = [];
 
-// console.log(cipherBuffer);
+	transposedBlocks.forEach(function(transposedBlock) {
+		var bf = brute_force_xor(transposedBlock.toString('hex'));
+		keys.push(bf[0].key);
+	});
 
-// for (var i = 1; i < 40; i++) {
-// 	var cipherByKeySize = bu.bufferToChunks(cipherBuffer, i);
-// 	var transposedBlocks = bu.transpose2D(cipherByKeySize);
-// 	var keys = [];
+	var key = keys.join('');
+	var decryptedMessage = xor.dec(cipherBuffer, key);
 
-// 	transposedBlocks.forEach(function(transposedBlock) {
-// 		var bf = brute_force_xor(transposedBlock.toString('hex'));
-// 		keys.push(bf[0].key);
-// 	});
+	console.log('key size - ', i)
+	console.log('key - ', key);
+	console.log(decryptedMessage);
+	console.log('********\n');
+}
 
-// 	var key = keys.join('');
-// 	var decryptedMessage = xor.dec(cipherBuffer, key);
-
-// 	console.log('key size - ', i)
-// 	console.log('key - ', key);
-// 	console.log(decryptedMessage);
-// 	console.log('********\n');
-// }
-
-// console.log('Terminator X: Bring the noise')
