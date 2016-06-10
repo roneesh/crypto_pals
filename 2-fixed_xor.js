@@ -25,3 +25,5 @@ if (c !== expectedHexResult) {
 } else {
 	console.log('it is working!')
 }
+
+module.exports = fixed_xor;
